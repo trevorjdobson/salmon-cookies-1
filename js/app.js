@@ -1,155 +1,88 @@
 'use strict';
 
-// STORE OBJECTS
-
-var firstPike = {
-  // Properties
-  location: '1st and Pike',
-  minCust: 23,
-  maxCust: 65,
-  aveCookiesBought: 6.3,
-  hourlyTotalsArr: [],
-  dailyTotal: 0,
-
-  // Methods
-  // Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
-  customersPerHour: function () {
-    //console.log('min' + this.minCust);
-    return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
-  },
-
-};
-
-var seatac = {
-  // Properties
-  location: 'SeaTac Airport',
-  minCust: 3,
-  maxCust: 24,
-  aveCookiesBought: 1.2,
-  hourlyTotalsArr: [],
-  dailyTotal: 0,
-
-  // Methods
-  // Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
-  customersPerHour: function () {
-    //console.log('min' + this.minCust);
-    return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
-  },
-
-};
-
-var seattleCenter = {
-  // Properties
-  location: 'Seattle Center',
-  minCust: 11,
-  maxCust: 38,
-  aveCookiesBought: 3.7,
-  hourlyTotalsArr: [],
-  dailyTotal: 0,
-
-  // Methods
-  // Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
-  customersPerHour: function () {
-    //console.log('min' + this.minCust);
-    return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
-  },
-
-};
-
-var capHill = {
-  // Properties
-  location: 'Capitol Hill',
-  minCust: 20,
-  maxCust: 38,
-  aveCookiesBought: 2.3,
-  hourlyTotalsArr: [],
-  dailyTotal: 0,
-
-  // Methods
-  // Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
-  customersPerHour: function () {
-    //console.log('min' + this.minCust);
-    return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
-  },
-
-};
-
-var alki = {
-  // Properties
-  location: 'Alki',
-  minCust: 2,
-  maxCust: 16,
-  aveCookiesBought: 4.6,
-  hourlyTotalsArr: [],
-  dailyTotal: 0,
-
-  // Methods
-  // Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
-  customersPerHour: function () {
-    //console.log('min' + this.minCust);
-    return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
-  },
-
-};
-
 // GLOBAL VARIABLES
 
 var times = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
 var numberOfHours = times.length;
-var stores = [firstPike, seatac, seattleCenter, capHill, alki];
 
+// STORE CONSTRUCTOR - properties
 
-// GLOBAL FUNCTIONS
+function Stores(location, minCust, maxCust, aveCookiesBought, hourlyTotalsArr, dailyTotal) {
+  this.location = location;
+  this.minCust = minCust;
+  this.maxCust = maxCust;
+  this.aveCookiesBought = aveCookiesBought;
+  this.hourlyTotalsArr = hourlyTotalsArr;
+  this.dailyTotal = dailyTotal;
+}
+
+// STORE CONSTRUCTOR - methods
+
+// Returns a random number of customers between the given minimum and maximum (includes both the minimum & maximum number)
+Stores.prototype.customersPerHour = function () {
+  //console.log('min' + this.minCust);
+  return parseInt(Math.random() * ((this.maxCust + 1) - this.minCust) + this.minCust);
+};
 
 // Generate hourly & daily totals of cookies, store object passed as a parameter
-function cookieTotals(whichStore) {
+Stores.prototype.cookieTotals = function () {
   for (var i = 0; i < numberOfHours; i++) {
-    //console.log('random number of custormers' + whichStore.customersPerHour());
-    var cookiesInAnHour = parseInt(whichStore.aveCookiesBought * whichStore.customersPerHour());
-    whichStore.hourlyTotalsArr.push(cookiesInAnHour);
-    whichStore.dailyTotal = whichStore.dailyTotal + cookiesInAnHour;
+    //console.log('random number of customers' + this.customersPerHour());
+    var cookiesInAnHour = parseInt(this.aveCookiesBought * this.customersPerHour());
+    this.hourlyTotalsArr.push(cookiesInAnHour);
+    this.dailyTotal = this.dailyTotal + cookiesInAnHour;
   }
-}
+};
+
+// Create store objects
+
+var firstPike = new Stores('1st and Pike', 23, 65, 6.3, [], 0);
+var seatac = new Stores('SeaTac Airport', 3, 24, 1.2, [], 0);
+var seattleCenter = new Stores('Seattle Center', 11, 38, 3.7, [], 0);
+var capHill = new Stores('Capitol Hill', 20, 38, 2.3, [], 0);
+var alki = new Stores('Alki', 2, 16, 4.6, [], 0);
+
+var storesArr = [firstPike, seatac, seattleCenter, capHill, alki];
 
 
-// Populate cookie totals
-for (var i = 0; i < stores.length; i++) {
-  cookieTotals(stores[i]);
-}
+// Function to add stores & totals to the page
 
+var displayStoreSales = function () {
+  for (var j = 0; j < storesArr.length; j++) {
 
-// Add stores & totals to the page
+    // Populate the array for hourly cookie sales
+    storesArr[j].cookieTotals();
 
-for (var j = 0; j < stores.length; j++) {
-  // Identify the parent
-  var cookieContainerUlEl = document.getElementById('cookie-count-container');
+    // Identify the parent
+    var cookieContainerUlEl = document.getElementById('cookie-count-container');
 
-  // Create list item to hold store informtion
-  var storeLi = document.createElement('li');
+    // Create list item to hold store informtion
+    var storeLi = document.createElement('li');
 
-  // Add store name to the storeLi
-  var storeNameH2 = document.createElement('h2');
-  storeNameH2.textContent = stores[j].location;
-  storeLi.appendChild(storeNameH2);
+    // Add store name to the storeLi
+    var storeNameH2 = document.createElement('h2');
+    storeNameH2.textContent = storesArr[j].location;
+    storeLi.appendChild(storeNameH2);
 
-  // Add hourly totals to the storeli
-  var hourlyTotalList = document.createElement('ul');
-  for (var k = 0; k < times.length; k++) {
-    var hourTotalLi = document.createElement('li');
-    hourTotalLi.textContent = times[k] + ': ' + stores[j].hourlyTotalsArr[k];
-    hourlyTotalList.appendChild(hourTotalLi);
+    // Add hourly totals to the storeli
+    var hourlyTotalList = document.createElement('ul');
+    for (var k = 0; k < times.length; k++) {
+      var hourTotalLi = document.createElement('li');
+      hourTotalLi.textContent = times[k] + ': ' + storesArr[j].hourlyTotalsArr[k];
+      hourlyTotalList.appendChild(hourTotalLi);
+    }
+
+    // Add daily total to the storeLi
+    var dailyTotalLi = document.createElement('li');
+    dailyTotalLi.textContent = 'Total: ' + storesArr[j].dailyTotal;
+    hourlyTotalList.appendChild(dailyTotalLi);
+
+    //hourlyTotalList.textContent = storesArr[j].hourlyTotalsArr;
+    storeLi.appendChild(hourlyTotalList);
+
+    // Add the storeLi into the cookieContainer
+    cookieContainerUlEl.appendChild(storeLi);
   }
+};
 
-  // Add daily total to the storeLi
-  var dailyTotalLi = document.createElement('li');
-  dailyTotalLi.textContent = 'Total: ' + stores[j].dailyTotal;
-  hourlyTotalList.appendChild(dailyTotalLi);
-
-  //hourlyTotalList.textContent = stores[j].hourlyTotalsArr;
-  storeLi.appendChild(hourlyTotalList);
-
-
-
-  // Add the storeLi into the cookieContainer
-  cookieContainerUlEl.appendChild(storeLi);
-}
+displayStoreSales();
