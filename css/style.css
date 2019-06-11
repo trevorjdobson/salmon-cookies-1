@@ -1,9 +1,42 @@
 html {
-  background-color: aquamarine;
+  background-color: #f0e5dc;
+  font-family: 'Roboto', sans-serif;
 }
 
-ul {
+ul#cookie-count-container {
   list-style: none;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
 }
 
-li {padding: 0;}
+ul#cookie-count-container > li {
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  float: left;
+  width: 29%;
+  margin: 20px 2%;
+  overflow: hidden;
+}
+
+.logo {
+  height: 200px;
+  font-family: 'Pacifico', serif;
+  text-align: center;
+  font-size: 50px;
+  line-height: 1.2; 
+  color: rgb(235, 84, 64);
+}
+
+.logo img {
+  width: 150px; 
+  margin-bottom: 10px;
+}
+
+nav {
+  text-align: center;
+}
+
+h1, h2 {text-align: center;}

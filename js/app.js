@@ -22,7 +22,7 @@ var firstPike = {
 
 var seatac = {
   // Properties
-  location: 'SeatTac Airport',
+  location: 'SeaTac Airport',
   minCust: 3,
   maxCust: 24,
   aveCookiesBought: 1.2,
@@ -132,15 +132,23 @@ for (var j = 0; j < stores.length; j++) {
   storeNameH2.textContent = stores[j].location;
   storeLi.appendChild(storeNameH2);
 
-  // Add hourly total to the storeli
-  var hourlyTotalList = document.createElement('p');
-  hourlyTotalList.textContent = stores[j].hourlyTotalsArr;
-  storeLi.appendChild(hourlyTotalList);
+  // Add hourly totals to the storeli
+  var hourlyTotalList = document.createElement('ul');
+  for (var k = 0; k < times.length; k++) {
+    var hourTotalLi = document.createElement('li');
+    hourTotalLi.textContent = times[k] + ': ' + stores[j].hourlyTotalsArr[k];
+    hourlyTotalList.appendChild(hourTotalLi);
+  }
 
   // Add daily total to the storeLi
-  var dailyTotalP = document.createElement('p');
-  dailyTotalP.textContent = stores[j].dailyTotal;
-  storeLi.appendChild(dailyTotalP);
+  var dailyTotalLi = document.createElement('li');
+  dailyTotalLi.textContent = 'Total: ' + stores[j].dailyTotal;
+  hourlyTotalList.appendChild(dailyTotalLi);
+
+  //hourlyTotalList.textContent = stores[j].hourlyTotalsArr;
+  storeLi.appendChild(hourlyTotalList);
+
+
 
   // Add the storeLi into the cookieContainer
   cookieContainerUlEl.appendChild(storeLi);
