@@ -34,6 +34,40 @@ Stores.prototype.cookieTotals = function () {
   }
 };
 
+// Add row displaying a store's cookie sales
+Stores.prototype.renderRow = function () {
+
+  // Populate the array for hourly cookie sales
+  this.cookieTotals();
+
+  // Identify the parent
+  var cookieTable = document.getElementById('cookie-count-container');
+
+  // Create a row item to display store informtion
+  var storeRow = document.createElement('tr');
+
+  // Add store name to the storeTable
+  var storeNameH2 = document.createElement('td');
+  storeNameH2.textContent = this.location;
+  storeRow.appendChild(storeNameH2);
+
+  for (var l = 0; l < this.hourlyTotalsArr.length; l++) {
+    // Add hourly cookie sales
+    var hourlySalesTd = document.createElement('td');
+    hourlySalesTd.textContent = this.hourlyTotalsArr[l];
+    storeRow.appendChild(hourlySalesTd);
+  }
+
+  // Add daily cookie sales
+  var dailySalesTd = document.createElement('td');
+  dailySalesTd.textContent = this.dailyTotal;
+  storeRow.appendChild(dailySalesTd);
+
+  // Add store row to the table
+  cookieTable.appendChild(storeRow);
+
+};
+
 // Create store objects
 
 var firstPike = new Stores('1st and Pike', 23, 65, 6.3, [], 0);
@@ -44,45 +78,41 @@ var alki = new Stores('Alki', 2, 16, 4.6, [], 0);
 
 var storesArr = [firstPike, seatac, seattleCenter, capHill, alki];
 
+// Function to add header row to table
 
-// Function to add stores & totals to the page
+var createHeaderRow = function () {
+  // Identify the parent
+  var cookieTable = document.getElementById('cookie-count-container');
 
-var displayStoreSales = function () {
-  for (var j = 0; j < storesArr.length; j++) {
+  // Create a header row
+  var headerRow = document.createElement('tr');
 
-    // Populate the array for hourly cookie sales
-    storesArr[j].cookieTotals();
+  // Create first column header in the heaer row with "Store Location"
+  var storeColumnHeading = document.createElement('th');
+  storeColumnHeading.textContent = 'Store Location';
+  headerRow.appendChild(storeColumnHeading);
 
-    // Identify the parent
-    var cookieContainerUlEl = document.getElementById('cookie-count-container');
-
-    // Create list item to hold store informtion
-    var storeLi = document.createElement('li');
-
-    // Add store name to the storeLi
-    var storeNameH2 = document.createElement('h2');
-    storeNameH2.textContent = storesArr[j].location;
-    storeLi.appendChild(storeNameH2);
-
-    // Add hourly totals to the storeli
-    var hourlyTotalList = document.createElement('ul');
-    for (var k = 0; k < times.length; k++) {
-      var hourTotalLi = document.createElement('li');
-      hourTotalLi.textContent = times[k] + ': ' + storesArr[j].hourlyTotalsArr[k];
-      hourlyTotalList.appendChild(hourTotalLi);
-    }
-
-    // Add daily total to the storeLi
-    var dailyTotalLi = document.createElement('li');
-    dailyTotalLi.textContent = 'Total: ' + storesArr[j].dailyTotal;
-    hourlyTotalList.appendChild(dailyTotalLi);
-
-    //hourlyTotalList.textContent = storesArr[j].hourlyTotalsArr;
-    storeLi.appendChild(hourlyTotalList);
-
-    // Add the storeLi into the cookieContainer
-    cookieContainerUlEl.appendChild(storeLi);
+  // Fill the rest of the column headers with times
+  for (var k = 0; k < times.length; k++) {
+    var timeHeading = document.createElement('th');
+    timeHeading.textContent = times[k];
+    headerRow.appendChild(timeHeading);
   }
+  cookieTable.appendChild(headerRow);
+
+  // Create last column header in the hedaer row with "Daily Location Total"
+  var dailyTotalHeading = document.createElement('th');
+  dailyTotalHeading.textContent = 'Daily Location Total';
+  headerRow.appendChild(dailyTotalHeading);
 };
 
-displayStoreSales();
+
+createHeaderRow();
+
+for (var j = 0; j < storesArr.length; j++) {
+  storesArr[j].renderRow();
+}
+
+
+
+
